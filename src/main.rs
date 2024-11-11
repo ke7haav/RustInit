@@ -1,256 +1,107 @@
-// use std::string;
 
-// use std::clone;
+/* 
+We use "use" Keywords for importing any module and public functions from 
+different file 
+*/
+mod lib;
+use std::env;
+use std::collections::HashMap;
+use std::thread;
+use std::time::Duration;
 
-trait Pintable{
-    fn print(&self){
-
-    }
-}
-struct Rectangle{
-    width:u32,
-    height:u32
-}
-
-impl Pintable for Rectangle{
-    fn print(&self){
-      println!("Rectangle: {} x {}",self.width ,self.height)
+mod my_module{
+    pub fn persoal(){
+        println!("Printing inside the Module ");
     }
 }
 
-trait HasArea {
-    fn area(&self) ->f64;
-}
+//Nested module 
 
-struct Square {
-    side:f64
-}
-
-impl HasArea for Square {
-    fn area(&self) ->f64 {
-        self.side *self.side
+mod my_mod2{
+    pub mod movie{
+        pub mod holywood{
+            pub fn play(name:&str){
+             println!("Movie name is - {}",name);
+            }
+        }
+        pub mod bollywood{
+            pub fn play_hindi(name:&str){
+             println!("Movie name is - {}",name);
+            }
+        }
     }
 }
 
-fn print_area <T:HasArea>(shape:T){
-    println!("Area of Shape is {}", shape.area());
-}
+
+use my_mod2::movie::holywood::play;
+use my_mod2::movie::bollywood::play_hindi;
+
 fn main() {
-
-    let rect1 = Rectangle{width:43,height:7};
-    rect1.print();
-
-    let squre1 = Square{
-        side:9.30
-    };
-
-    print_area(squre1);
-
-    const USERS:u32=100;
-    const USER_AVG:f64=42.4;
-
-    println!("Number Of Users are {}",USERS);
-    println!("Average of Users are {}",USER_AVG);
-    let a= 45; // Variables are by-default immutable 
-    let mut _b=66;
-    println!("{a}");
-    println!("{}",a);
-    println!("{}",_b);
-
-    _b= 90;
-    println!("{}",_b);
-
-    let c ="String";
-    println!("{}",c);
-
-    first_fn();
-    function_with_params(8);
-    multiple_params(99,"hochimin");
-    ex();
-    let mut _return_val = return_value();
-    println!("returned Value is -{}",_return_val);
-
-    data_type();
-    conditions();
-    loops();
-    ownership();
-    reference();
-    structs();
-
-    printcars(CarTypes::SUV);
-    // println!("{:?}",_x);
-}
-
-fn first_fn(){
-    println!("new Function")
-}
-
-fn function_with_params(x:i32){
-  println!("The Value in the param {}",x);
-}
-
-fn multiple_params(x: i32, y: &str){
-
-    println!("first Param {}",x);
-    println!("Second Param {}",y);
-}
-
-//expression
-fn ex(){
-    let y ={
-        let x= 10;
-        x+6
-    };
-  println!("value inside expression- {}",y)
-}
-
-fn return_value() -> i32{
-    98+57
-}
-
-fn data_type() {
-    //scalar Types - types where we can store single value
-    //Integer, boolean ,Floating,Char, Strings
-
-    //Compound Types - types where we store multiple data at a time 
-    // Array,tuples, dictionary
-
-
-    //tuple
-    let tup =(8,5,6);
-    println!("{:?}",tup);  // :? is default formatter 
-    println!("{}",tup.2);
-
-    let mut _tup2:(i32,u8,f64) = (4,6,7.3);
-    // Here we can change the value in tuple as it is mutable but we can't add the value in the tuple
-
-    println!("{:?}",_tup2);
-    _tup2.2 = 8.9;
-    println!("{:?}",_tup2);
-
-    // Array - is a collection of multiple values
-    let mut _arr =[7,3,40,0,1];
-    println!("This is the whole Array - {:?}",_arr);
-    println!("Fourth Element of Array {}",_arr[3]);
-
-}
-
-fn conditions(){
-    let no = 7;
-    if no<7{
-        println!("Less Than 7")
-    }else if no==7{
-        println!("Equal to 7")
-    }else {
-        println!("Greater Than 7")
-    }
-
-    // ShortEnd If Condition
-    let _condition = false;
-    let number = if _condition {5} else{0};
-    println!("Let's see the number - {}", number)
-}
-
-fn loops(){
-//Types of Loops 
-//loops , for, while
-let mut _x =10;
-loop {
-    println!("Print Till 10- {}",_x);
-
-    if _x == 11 || _x==10{
-      break;
-    }
-}
-
-while _x!=0{
-    println!(" Number-{}",_x);
-    _x-=1;
-}
-
-let mut _arr=[2,3,5,7,1];
-let mut _index = 0;
-
-while _index<3 {
-    println!("Value of Index is {}",_arr[_index]);
-    _index+=1;
-}
-
-
-for _y in 1..11{  // y=0;y<11;y++ print y expect 5 
-    if _y==5{
-        continue;
-    }
-    println!("y is ={}",_y);
-}
     
+    my_module::persoal();
+    lib::print();
+    lib::print2();
+    lib::print3();
+
+
+
+let arg:Vec<String>= env::args().collect();
+// println!("{}",arg[1]);
+
+for argunments in arg.iter(){
+    println!("{}",argunments);
 }
 
-fn ownership(){
-    let x=90;
-    println!("value of x - {}",x);
-    let y=x;
-    println!("value of Y - {}",y);
-  
-    //------------------------------
+    // Nested 
+    play("Solc");
+    play_hindi("Hash-Map");
 
-    let a =String::from("Koder");
-    // let b:&str="KODER";
-    let b= a.clone();// clone funciton only works with string and Arrays
+    // Declearing a hashmap using new marks variable
+    let mut marks: HashMap<&str ,i32> = HashMap::new();
 
-    println!("{}-----{}",a,b);
-}
-
-fn reference(){
-    let mut _x=10;
-    let z = &mut _x;
-    *z +=1;
-    println!("value of z is - {}",z);
-    println!("value of x is - {}",_x);
-
-}
-
-struct User{
-    name :String,
-    company: String,
-    age:u8
-}
-
-fn structs(){
-
-    let mut _u1 = User{
-        name:String::from("Asish"),
-        company:String::from("WazirX"),
-        age:26
-    };
-
-    println!("Name {} Company {} Age {}", _u1.name,_u1.company, _u1.age);
-    _u1.age=27;
-    println!("Age Updated {}", _u1.age);
-
-}
-
-enum CarTypes {
-    Hatchback,
-    Sedan,
-    SUV,
-    MUV
-}
-
-fn printcars(car:CarTypes){
-match car {
-    CarTypes::Hatchback=>{
-        println!("Small car Segment")
-    }
-    CarTypes::MUV=>{
-        println!("MultiPurpose Car")
-    }
-    CarTypes::SUV=>{
-        println!("Sports Utility ")
-    }
-    CarTypes::Sedan=>{
-        println!("Luxury Cars")
-    }
+    // Inserting into Hashmap 
+    marks.insert("Rust",40);
+    marks.insert("Go",60);
+    marks.insert("Solidity",85);
+    marks.insert("JavaScript",50);
+    marks.insert("TypeScript",50);
     
-}
+    println!("{:?}",marks);
+    //find the length
+    println!("Total Number of Subjects - {}",marks.len());
+
+    //matching the value
+    match marks.get("Rust"){
+        Some(mark) => println!("You got {} marks",mark),
+        None => println!("Subject not matched")
+    }
+
+    //Removing a value
+    marks.remove("TypeScript");
+    println!("{:?}",marks);
+
+
+    //Loops through HashMap 
+
+    for(subject,mark) in &marks{ // key- subject, value - mark
+        println!("For {} you got {} marks ",subject,mark )
+    }
+
+    //Check the values
+    println!("Do we have C++ as subject {}",&marks.contains_key("C++"));
+
+
+    // Creating a new thread to run parallely with main function 
+    thread::spawn(||{
+        for i in 1..100{
+            println!("The numbers are from the spawned thread {}",i);
+            thread::sleep(Duration::from_millis(1));
+        }
+    });
+
+    // code for main Function 
+    for i in 1..4{
+        println!("The Numbers are from the Main Thread {}",i);
+        thread::sleep(Duration::from_millis(200));
+    }
 }
